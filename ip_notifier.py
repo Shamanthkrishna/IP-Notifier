@@ -177,30 +177,30 @@ def build_chat_card(
     public_ip: Optional[str],
     changed_at: str,
 ) -> dict:
-    """Build a Google Chat Cards v1 payload."""
+    """Build a Google Chat Cards v2 payload for the REST API endpoint."""
     widgets = [
-        {"keyValue": {"topLabel": "Hostname", "content": hostname}},
-        {"keyValue": {"topLabel": "Previous IP", "content": prev_ip or "N/A"}},
-        {"keyValue": {"topLabel": "New Local IP", "content": new_local_ip}},
+        {"decoratedText": {"topLabel": "Hostname", "text": hostname}},
+        {"decoratedText": {"topLabel": "Previous IP", "text": prev_ip or "N/A"}},
+        {"decoratedText": {"topLabel": "New Local IP", "text": new_local_ip}},
     ]
     if public_ip:
         widgets.append(
-            {"keyValue": {"topLabel": "Public IP", "content": public_ip}}
+            {"decoratedText": {"topLabel": "Public IP", "text": public_ip}}
         )
     widgets.append(
-        {"keyValue": {"topLabel": "Changed at", "content": changed_at}}
+        {"decoratedText": {"topLabel": "Changed at", "text": changed_at}}
     )
 
     return {
-        "cards": [
+        "cardsV2": [
             {
-                "header": {
-                    "title": "IP Address Changed",
-                    "subtitle": f"{hostname} · {changed_at}",
-                },
-                "sections": [{"widgets": widgets}],
-                "footer": {
-                    "text": f"IP Change Notifier — running on {hostname}"
+                "cardId": "ip-change-notification",
+                "card": {
+                    "header": {
+                        "title": "IP Address Changed",
+                        "subtitle": f"{hostname} · {changed_at}",
+                    },
+                    "sections": [{"widgets": widgets}],
                 },
             }
         ]
