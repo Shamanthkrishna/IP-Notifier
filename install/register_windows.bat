@@ -13,6 +13,14 @@ REM ============================================================
 
 setlocal
 
+REM --- Self-elevate if not running as Administrator ---
+net session >nul 2>&1
+if %ERRORLEVEL% neq 0 (
+    echo Requesting Administrator privileges...
+    powershell -NoProfile -Command "Start-Process -FilePath '%~f0' -Verb RunAs -Wait"
+    exit /b
+)
+
 set "SCRIPT_DIR=%~dp0.."
 set "PYTHON_EXE=python"
 set "TASK_NAME=IPChangeNotifier"
