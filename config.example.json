@@ -1,0 +1,11 @@
+{
+  "user_name": "Your Name",
+  "hostname_label": "YOUR-PC-NAME",
+  "google_chat_webhook_url": "https://chat.googleapis.com/v1/spaces/XXXX/messages?key=YOUR_KEY&token=YOUR_TOKEN",
+  "include_public_ip": true,
+  "retry_count": 5,
+  "retry_delay_seconds": 10,
+  "cooldown_minutes": 5,
+  "cache_file": "ip_cache.txt",
+  "log_file": "ip_history.log"
+}
