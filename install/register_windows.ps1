@@ -31,13 +31,18 @@ if (-not (Test-Path $ScriptPath)) {
     exit 1
 }
 
-# --- Locate Python executable ---
+# --- Locate Python executable (use pythonw.exe for headless / no-console execution) ---
 $pythonCmd = Get-Command python -ErrorAction SilentlyContinue
 if (-not $pythonCmd) {
     Write-Error "Python not found in PATH. Install Python and ensure it is on PATH."
     exit 1
 }
-$PythonExe = $pythonCmd.Source
+# pythonw.exe lives beside python.exe and suppresses the console window entirely
+$PythonExe = Join-Path (Split-Path $pythonCmd.Source) 'pythonw.exe'
+if (-not (Test-Path $PythonExe)) {
+    Write-Warning "pythonw.exe not found next to python.exe; falling back to python.exe (console window will appear)."
+    $PythonExe = $pythonCmd.Source
+}
 
 Write-Host ''
 Write-Host '============================================================' -ForegroundColor Cyan
@@ -102,7 +107,8 @@ $t3.Enabled = $true
 $settings = New-ScheduledTaskSettingsSet `
     -ExecutionTimeLimit (New-TimeSpan -Minutes 5) `
     -MultipleInstances  IgnoreNew `
-    -StartWhenAvailable     # run as soon as possible if a trigger was missed
+    -StartWhenAvailable `   # run as soon as possible if a trigger was missed
+    -Hidden                 # suppress any UI / console window at the task level
 
 # ---------------------------------------------------------------------------
 # Principal — run as the current interactive user with highest privileges
