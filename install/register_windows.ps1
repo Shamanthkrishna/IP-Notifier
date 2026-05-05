@@ -107,8 +107,7 @@ $t3.Enabled = $true
 $settings = New-ScheduledTaskSettingsSet `
     -ExecutionTimeLimit (New-TimeSpan -Minutes 5) `
     -MultipleInstances  IgnoreNew `
-    -StartWhenAvailable `   # run as soon as possible if a trigger was missed
-    -Hidden                 # suppress any UI / console window at the task level
+    -StartWhenAvailable     # run as soon as possible if a trigger was missed
 
 # ---------------------------------------------------------------------------
 # Principal — run as the current interactive user with highest privileges
